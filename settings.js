@@ -15,12 +15,12 @@ QuickCSSDIV.classList.add("flexColumn")
 QuickCSSDIV.append(QuickCSSTitle);
 QuickCSSDIV.append(QuickCSSTextArea);
 
-let saveAndExit = document.createElement("button");
-saveAndExit.textContent = "Save and exit";
+let closeMenuBtn = document.createElement("button");
+closeMenuBtn.textContent = "Close";
 
-saveAndExit.addEventListener("click", () => {
+closeMenuBtn.addEventListener("click", () => {
     localStorage.setItem("quick_css", QuickCSSTextArea.value);
-    toggleVisibility(settingsContainer);
+    toggleVisibility(popupContainer);
     space();
     print("refresh to see your changes");
     space();
@@ -29,7 +29,7 @@ saveAndExit.addEventListener("click", () => {
 showSettings.addEventListener("click", function (e) {
     popupBox.innerHTML = null;
     popupBox.append(QuickCSSDIV);
-    popupBox.append(saveAndExit);
+    popupBox.append(closeMenuBtn);
     toggleVisibility(popupContainer);
 });
 
@@ -103,5 +103,6 @@ savePanel.addEventListener("click", function (e) {
     popupBox.append(loadData);
     popupBox.append(saveData);
     popupBox.append(eraseAllData);
+    popupBox.append(closeMenuBtn);
     toggleVisibility(popupContainer);
 });

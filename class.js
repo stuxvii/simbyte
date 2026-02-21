@@ -16,6 +16,37 @@ class LifeStage {
     static getString(stage) {
         return this.#labels[stage] ?? "Undefined";
     }
+
+    static getMultiplier(lifestage) {
+        switch (lifestage) {
+            case LifeStage.Elder:
+                break;
+            case LifeStage.Adult:
+                break;
+            case LifeStage.Teenager:
+                break;
+            case LifeStage.Child:
+                break;
+            case LifeStage.Baby:
+                break;
+        }
+    }
+
+    static getStage(age) {
+        if (age >= 60) {
+            return LifeStage.Elder
+        }
+        if (age >= 20) {
+            return LifeStage.Adult
+        }
+        if (age >= 13) {
+            return LifeStage.Teenager
+        }
+        if (age >= 7) {
+            return LifeStage.Child
+        }
+        return LifeStage.Baby
+    }
 }
 
 class Relation {
