@@ -167,7 +167,7 @@ textarea {
 
 #effectsList > div {
     padding: var(--spacing);
-    border: var(---color) 1px solid;
+    border: var(--color) 1px solid;
     width: fit-content;
 }
 
