@@ -38,7 +38,7 @@ function begin() {
 
     update_meters();
 
-    header("Age: 0. Welcome to Fortnite.");
+    header("Age: 0. Welcome to simbyte.");
     print(`I was born ${your.gender}. My name is ${your.name} ${your.surname}`);
     print(`I was born on the fateful day of ${your.birthday.toLocaleString('default', { month: 'long' })} ${your.birthday.getDate()}, as a ${new ZodiacSign(your.birthday).sign}`);
     space();
