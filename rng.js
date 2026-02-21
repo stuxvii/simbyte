@@ -76,6 +76,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         prng.quick = function () { return arc4.g(4) / 0x100000000; }
         prng.double = prng;
 
+        // so we can access the seed
+        prng.seed = shortseed;
+
         // Mix the randomness into accumulated entropy.
         mixkey(tostring(arc4.S), pool);
 
@@ -224,24 +227,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     // initialization.
     //
     mixkey(math.random(), pool);
-
-    //
-    // Nodejs and AMD support: export the implementation as a module using
-    // either convention.
-    //
-    if ((typeof module) == 'object' && module.exports) {
-        module.exports = seedrandom;
-        // When in node.js, try using crypto package for autoseeding.
-        try {
-            nodecrypto = require('crypto');
-        } catch (ex) { }
-    } else if ((typeof define) == 'function' && define.amd) {
-        define(function () { return seedrandom; });
-    } else {
-        // When included as a plain script, set up Math.seedrandom global.
-        math['seed' + rngname] = seedrandom;
-    }
-
+    math['seed' + rngname] = seedrandom;
+    console.log(math['seed' + rngname]);
 
     // End anonymous scope, and pass initial values.
 })(
@@ -252,7 +239,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     Math    // math: package containing random, pow, and seedrandom
 );
 
-var my_rng = new Math.seedrandom();
+let my_seed = localStorage.getItem("seed") != null ? localStorage.getItem("seed") : null;
+let my_rng = new Math.seedrandom(my_seed);
+
 function rand_int(max) {
     return Math.floor(my_rng.quick() * max);
 }

@@ -9,6 +9,7 @@
     margin: 0;
     padding: 0;
     color: var(--color);
+    user-select: none;
 }
 
 @font-face {
@@ -39,7 +40,7 @@ body {
     filter: invert();
 }
 
-button {
+button, input {
     font-family: terminus;
     background-color: var(--background-color);
 }
@@ -80,10 +81,9 @@ textarea {
 
 .infoBox {
     position: fixed;
-    top: 3rem;
+    top: 3.3rem;
     right: 0;
     padding: var(--spacing);
-    margin: var(--spacing);
     border: 1px solid var(--color);
     display: flex;
     flex-direction: column;
@@ -188,7 +188,7 @@ textarea {
     align-items: center;
 }
 
-#settingsBox {
+#popupBox {
     padding: 1rem;
     background-color: var(--background-color);
     border: 1px solid var(--color);

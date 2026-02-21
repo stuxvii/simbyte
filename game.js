@@ -1,4 +1,35 @@
 function begin() {
+    let saveJSON = localStorage.getItem("save");
+    let save = JSON.parse(saveJSON);
+
+    if (save && save.characterData) {
+        your = save.characterData;
+        your.birthday = new Date(your.birthday);
+        if (save.history) {
+            for (let id = 0; id < save.history.length; id++) {
+                const element = save.history[id];
+                console.log(element.type);
+                switch (element.type) {
+                    case "h2":
+                        header(element.text);
+                        break;
+                    case "span":
+                        print(element.text);
+                        break;
+                    case "br":
+                        space();
+                        break;
+                
+                    default:
+                        break;
+                }
+            }
+        }
+
+        update_meters();
+        return;
+    }
+
     let common_surname = surnames[rand_int(surnames.length)];
     let father = new Person({
         gender: "male",
@@ -36,14 +67,14 @@ function begin() {
     your.family.push({ person: father, relation: Relation.Parent });
     your.family.push({ person: mother, relation: Relation.Parent });
 
-    update_meters();
-
     header("Age: 0. Welcome to simbyte.");
     print(`I was born ${your.gender}. My name is ${your.name} ${your.surname}`);
     print(`I was born on the fateful day of ${your.birthday.toLocaleString('default', { month: 'long' })} ${your.birthday.getDate()}, as a ${new ZodiacSign(your.birthday).sign}`);
     space();
     print(`My father is ${father.name} ${father.surname} of ${father.age} years old`);
     print(`My mother is ${mother.name} ${mother.surname} of ${mother.age} years old`);
+
+    update_meters();
 }
 
 function processYearlyEvents(person) {
@@ -102,9 +133,5 @@ showFamilyTree.addEventListener("click", function (e) {
     infoBox.style.display = "flex";
 });
 
-showSettings.addEventListener("click", function (e) {
-    toggleVisibility(settingsContainer);
-});
-
-window.addEventListener('beforeunload', function (e) {e.preventDefault(); });
+window.addEventListener('beforeunload', function (e) {e.preventDefault()});
 begin();

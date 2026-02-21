@@ -10,6 +10,7 @@ const stats = {
 
 let your = new Person();
 let canInteract = true;
+let chatlogs = [];
 let currentIBPanel = infoBoxPanels.family;
 
 Object.entries(stats).forEach(([key, icon]) => {
@@ -50,17 +51,29 @@ function print(urtext) {
     textContainer.append(txt);
     let br = document.createElement("br");
     textContainer.append(br);
+
+    chatlogs.push({
+        text: urtext,
+        type: "span"
+    });
 }
 
 function space() {
     let br = document.createElement("br");
     textContainer.append(br);
+    chatlogs.push({
+        type: "br"
+    });
 }
 
 function header(urtext) {
     let txt = document.createElement("h2");
     txt.textContent = urtext;
     textContainer.append(txt);
+    chatlogs.push({
+        text: urtext,
+        type: "h2"
+    });
 }
 
 function clamp(num, min, max) {
@@ -69,6 +82,10 @@ function clamp(num, min, max) {
         : num >= max
             ? max
             : num
+}
+
+function generateSaveFile() {
+    return JSON.stringify({characterData: your, seed: my_rng.seed, history: chatlogs});
 }
 
 function update_meters() {
@@ -150,6 +167,8 @@ function update_meters() {
     });
 
     yourInfo.textContent = `${your.name} ${your.surname} - $${your.money}`;
+
+    localStorage.setItem("save", generateSaveFile());
 
     textContainer.scrollTo({
         top: textContainer.scrollHeight,
