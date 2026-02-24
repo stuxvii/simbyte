@@ -6,6 +6,7 @@
     --bezier: cubic-bezier(0,0,.58,1);
     --animation-speed: 0.25s;
     --spacing: 5px;
+    --font: terminus;
 }
 
 * {
@@ -16,12 +17,17 @@
 }
 
 @font-face {
+    font-family: pixel;
+    src: url("/fnt/04B03.ttf");
+}
+
+@font-face {
     font-family: terminus;
     src: url("/fnt/terminus_bold.ttf");
 }
 
 body {
-    font-family: terminus;
+    font-family: var(--font);
     text-shadow:
         -1px -1px 0 var(--shadow-color),
         1px -1px 0 var(--shadow-color),
@@ -44,7 +50,7 @@ body {
 }
 
 button, input {
-    font-family: terminus;
+    font-family: var(--font);
     background-color: var(--background-color);
     padding: var(--spacing);
 }
@@ -56,7 +62,7 @@ textarea {
     overflow-wrap: normal;
     overflow-x: scroll;
     width: 150px; 
-    height: 100px;
+    height: 40px;
     transition: width var(--animation-speed) var(--bezier), 
                 height var(--animation-speed) var(--bezier);
 }

@@ -7,6 +7,7 @@ const el = (tag, props = {}, children = []) => {
 
 const getCSS = () => localStorage.getItem("quick_css") || "";
 const getCustomJS = () => localStorage.getItem("custom_js") || "";
+const getOldFont = () => localStorage.getItem("old_font") || false;
 const getRemoteJS = () => {
     try {
         const remote_js = localStorage.getItem("remote_js");
@@ -24,8 +25,13 @@ const updateCSS = (val) => {
     document.getElementById("dynamic-style").textContent = val;
 };
 
-const updateJS = (val) => {
-    localStorage.setItem("custom_js", val);
+const fontStyleTag = el("style", { id: "dynamic-font-style" });
+document.head.append(fontStyleTag);
+
+const updateJS = (val) => localStorage.setItem("custom_js", val);
+const updateOldFont = (val) => {
+    localStorage.setItem("old_font", val)
+    document.getElementById("dynamic-font-style").textContent = val ? ":root{--font: pixel}" : "";
 };
 
 const updateRemoteJS = (val) => {
@@ -36,6 +42,23 @@ const updateRemoteJS = (val) => {
 
 const styleTag = el("style", { id: "dynamic-style", textContent: getCSS() });
 document.head.append(styleTag);
+
+const createOldFontCheckbox = () => {
+    const input = el("input", {
+        checked: getOldFont(),
+        type: "checkbox",
+        id: "oldFontCheckbox",
+        oninput: (e) => updateOldFont(e.target.checked)
+    });
+
+    return el("div", {}, [
+        input,
+        el("label", { 
+            textContent: " Old font",
+            for: "oldFontCheckbox",
+        }),
+    ]);
+};
 
 const createCustomJSView = () => {
     const textarea = el("textarea", {
@@ -145,5 +168,7 @@ const openMenu = (content) => {
     toggleVisibility(popupContainer);
 };
 
+document.getElementById("dynamic-font-style").textContent = getOldFont() ? ":root{--font: pixel}" : "";
+
 savePanel.addEventListener("click", () => openMenu(createSaveView()));
-showSettings.addEventListener("click", () => openMenu([createQuickCSSView(), createRemoteJSView(), createCustomJSView()]));
+showSettings.addEventListener("click", () => openMenu([createOldFontCheckbox(), createQuickCSSView(), createRemoteJSView(), createCustomJSView()]));
