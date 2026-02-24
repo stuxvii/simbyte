@@ -228,3 +228,32 @@ function createTreeHTML(node) {
     html += `</li>`;
     return html;
 }
+
+function processYearlyEvents(person) {
+    const eligibleEvents = eventPool.filter(ev => ev.isEligible(person));
+
+    for (let e in your.effects) {
+        const effect = your.effects[e];
+        Object.entries(stats).forEach(([key, _]) => {
+            if (effect[key]) {
+                your[key] += effect[key];
+            }
+        });
+        if (effect.monetary) {
+            your.money += effect.monetary;
+        }
+    }
+
+    eligibleEvents.forEach(event => {
+        if (Math.random() < event.chance) {
+            header(event.title);
+            print(event.description);
+            event.effect(person);
+        }
+    });
+
+    person.happiness = clamp(person.happiness, 0, 100);
+    person.intelligence = clamp(person.intelligence, 0, 100);
+    person.looks = clamp(person.looks, 0, 100);
+    person.health = clamp(person.health, 0, 100);
+}

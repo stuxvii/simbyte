@@ -28,7 +28,7 @@
         </div>
         <div id="navbar">
             <div>
-                <span class="button" id="ageUp">✚</span>
+                <span class="button" id="ageUp">➕</span>
                 <span class="button" id="showShop">shop</span>
             </div>
             <div id="yourStatistics"></div>
@@ -44,7 +44,38 @@
     <script src="js/data.js"></script>
     <script src="js/helper.js"></script>
     <script src="js/settings.js"></script>
+    <div id="injectedScripts">
+        <script>
+            const js = getCustomJS();
+            if (js) {
+                console.log("Loading quick scripts...")
+                const scriptTag = document.createElement("script");
+                scriptTag.textContent = js;
+                injectedScripts.append(scriptTag);
+            }
+
+            const getRemoteJSArray = () => {
+                try {
+                    const remote_js = localStorage.getItem("remote_js");
+                    const json = JSON.parse(remote_js);
+                    return json;
+                } catch (error) {
+                    console.error("Error when parsing the JSON array of remot Javascript scripts!!! ", error);
+                    return [];
+                }
+            };
+            const rem_js = getRemoteJSArray();
+            rem_js.forEach(link => {
+                console.log(`Loading scripts from ${link}...`)
+                const scriptTag = document.createElement("script");
+                scriptTag.src = link;
+                injectedScripts.append(scriptTag);
+            });
+
+        </script>
+    </div>
     <script src="js/game.js"></script>
+    <script src="js/listeners.js"></script>
 </body>
 
 </html>

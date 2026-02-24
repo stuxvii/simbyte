@@ -1,108 +1,149 @@
-let quick_css = localStorage.getItem("quick_css");
+const el = (tag, props = {}, children = []) => {
+    const element = document.createElement(tag);
+    Object.assign(element, props);
+    children.forEach(child => element.append(child));
+    return element;
+};
 
-let QuickCSSStyle = document.createElement("style");
-QuickCSSStyle.textContent = quick_css;
-document.head.append(QuickCSSStyle);
-
-let QuickCSSTitle = document.createElement("span");
-QuickCSSTitle.textContent = "QuickCSS";
-
-let QuickCSSTextArea = document.createElement("textarea");
-QuickCSSTextArea.value = quick_css;
-
-let QuickCSSDIV = document.createElement("div");
-QuickCSSDIV.classList.add("flexColumn")
-QuickCSSDIV.append(QuickCSSTitle);
-QuickCSSDIV.append(QuickCSSTextArea);
-
-let closeMenuBtn = document.createElement("button");
-closeMenuBtn.textContent = "Close";
-
-closeMenuBtn.addEventListener("click", () => {
-    localStorage.setItem("quick_css", QuickCSSTextArea.value);
-    toggleVisibility(popupContainer);
-    space();
-    print("refresh to see your changes");
-    space();
-});
-
-showSettings.addEventListener("click", function (e) {
-    popupBox.innerHTML = null;
-    popupBox.append(QuickCSSDIV);
-    popupBox.append(closeMenuBtn);
-    toggleVisibility(popupContainer);
-});
-
-toggleFullscreen.addEventListener("click", () => {
-    if (document.fullscreenElement) {
-        document.exitFullscreen();
-        return;
+const getCSS = () => localStorage.getItem("quick_css") || "";
+const getCustomJS = () => localStorage.getItem("custom_js") || "";
+const getRemoteJS = () => {
+    try {
+        const remote_js = localStorage.getItem("remote_js");
+        const json = JSON.parse(remote_js);
+        const result = json.join('\n');
+        return result;
+    } catch (error) {
+        console.error("Error when parsing the JSON array of remot Javascript scripts!!! ", error);
+        return "";
     }
-    document.documentElement.requestFullscreen();
-});
+};
 
-let eraseAllData = document.createElement("button");
-eraseAllData.textContent = "Restart current run";
-eraseAllData.style.backgroundColor = "brown";
+const updateCSS = (val) => {
+    localStorage.setItem("quick_css", val);
+    document.getElementById("dynamic-style").textContent = val;
+};
 
-eraseAllData.addEventListener("click", () => {
-    if (confirm("Do you want to reset your save? This will be permanent.")) {
+const updateJS = (val) => {
+    localStorage.setItem("custom_js", val);
+};
+
+const updateRemoteJS = (val) => {
+    const split = val.split(/\r\n?|\n/);
+    const parsed = JSON.stringify(split);
+    localStorage.setItem("remote_js", parsed);
+};
+
+const styleTag = el("style", { id: "dynamic-style", textContent: getCSS() });
+document.head.append(styleTag);
+
+const createCustomJSView = () => {
+    const textarea = el("textarea", {
+        value: getCustomJS(),
+        spellcheck: false,
+        oninput: (e) => updateJS(e.target.value)
+    });
+
+    return el("div", { className: "flexColumn" }, [
+        el("span", { 
+            textContent: "CustomJS", 
+        }),
+        textarea
+    ]);
+};
+
+const createRemoteJSView = () => {
+    const textarea = el("textarea", {
+        value: getRemoteJS(),
+        spellcheck: false,
+        oninput: (e) => updateRemoteJS(e.target.value)
+    });
+
+    return el("div", { className: "flexColumn" }, [
+        el("span", { 
+            textContent: "Remote JS (Links separated by newlines)", 
+        }),
+        textarea
+    ]);
+};
+
+const createQuickCSSView = () => {
+    const textarea = el("textarea", {
+        value: getCSS(),
+        spellcheck: false,
+        oninput: (e) => updateCSS(e.target.value)
+    });
+
+    return el("div", { className: "flexColumn" }, [
+        el("span", { 
+            textContent: "QuickCSS", 
+        }),
+        textarea
+    ]);
+};
+
+const createSaveView = () => {
+    const fileInput = el("input", { type: "file" });
+
+    return [
+        fileInput,
+        el("button", {
+            textContent: "Load data",
+            onclick: () => handleLoad(fileInput.files[0])
+        }),
+        el("button", {
+            textContent: "Save data",
+            onclick: handleSave
+        }),
+        el("button", {
+            textContent: "Restart current run",
+            className: "btn-danger",
+            onclick: handleReset
+        })
+    ];
+};
+
+function handleSave() {
+    const blob = new Blob([generateSaveFile()], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = el("a", {
+        href: url,
+        download: `simbyte_save_${Date.now()}.json`
+    });
+    link.click();
+    URL.revokeObjectURL(url);
+}
+
+function handleLoad(file) {
+    if (!file || !confirm("Overwrite current game?")) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+        localStorage.setItem("save", e.target.result);
+        location.reload();
+    };
+    reader.readAsText(file);
+}
+
+function handleReset() {
+    if (confirm("Reset save permanently?")) {
         localStorage.setItem("save", null);
-        toggleVisibility(popupContainer);
         location.reload();
     }
-});
+}
 
-let saveData = document.createElement("button");
-saveData.textContent = "Save data";
-
-saveData.addEventListener("click", () => {
-    let text = generateSaveFile();
-
-    // https://stackoverflow.com/a/18197341
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    element.setAttribute('download', `simbyte_save for ${new Date}.json`);
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-});
-
-let loadDataInput = document.createElement("input");
-loadDataInput.type = "file";
-
-let loadData = document.createElement("button");
-loadData.textContent = "Load data";
-
-loadData.addEventListener("click", () => {
-    if (!loadDataInput.files[0]) {
-        return;
+const openMenu = (content) => {
+    popupBox.replaceChildren();
+    if (Array.isArray(content)) {
+        content.forEach(c => popupBox.append(c));
+    } else {
+        popupBox.append(content);
     }
-    let file = loadDataInput.files[0];
-    if (!file.type == "application/json") {
-        return;
-    }
-
-    if (confirm("Do you want to load a save? This will overwrite your current game.")) {
-        var reader = new FileReader();
-        reader.readAsText(file,'UTF-8');
-
-        // https://stackoverflow.com/a/40971885
-        reader.onload = readerEvent => {
-            var content = readerEvent.target.result;
-            localStorage.setItem("save", content);
-            location.reload();
-        }
-    }
-});
-
-savePanel.addEventListener("click", function (e) {
-    popupBox.innerHTML = null;
-    popupBox.append(loadDataInput);
-    popupBox.append(loadData);
-    popupBox.append(saveData);
-    popupBox.append(eraseAllData);
-    popupBox.append(closeMenuBtn);
+    popupBox.append(el("button", {
+        textContent: "Close",
+        onclick: () => toggleVisibility(popupContainer)
+    }));
     toggleVisibility(popupContainer);
-});
+};
+
+savePanel.addEventListener("click", () => openMenu(createSaveView()));
+showSettings.addEventListener("click", () => openMenu([createQuickCSSView(), createRemoteJSView(), createCustomJSView()]));
