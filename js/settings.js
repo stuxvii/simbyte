@@ -15,7 +15,7 @@ const getRemoteJS = () => {
         const result = json.join('\n');
         return result;
     } catch (error) {
-        console.error("Error when parsing the JSON array of remot Javascript scripts!!! ", error);
+        console.error("Error when parsing the JSON array of remote JavaScript scripts!!!", error);
         return "";
     }
 };
