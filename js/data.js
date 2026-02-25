@@ -4,7 +4,7 @@ let surnames = ["Smith", "Johnson", "Bocse", "Codon", "Williams", "Brown", "Jone
 let birth_reasons = ["i was born in a normal, healthy way.","i was born after my father's condom broke","i was summoned at a cult ritual","i was born in a normal way, however my mother died to due maternal death","i was an inhome birth"]
 let eventPool = [
     new LifeEvent({
-        title: "Plis No Brocoli.",
+        title: "Plis No Brocolly.",
         description: () => 0 == rand_int(2) 
             ? "Your father is forcing you to eat your greens." 
             : "Your mother is forcing you to eat your greens.",
