@@ -229,6 +229,20 @@ let eventPool = [
         maxAge: 18,
     }),
     new LifeEvent({
+        title: "Medium rare meat.",
+        description: "You're starting middle school",
+        chance: 1.,
+        minAge: 11,
+        maxAge: 11,
+    }),
+    new LifeEvent({
+        title: "Medium well meat.",
+        description: "You're starting high school",
+        chance: 1.,
+        minAge: 14,
+        maxAge: 14,
+    }),
+    new LifeEvent({
         title: "Lucky.",
         description: "You found a dollar while walking down the street.",
         chance: 0.2,
