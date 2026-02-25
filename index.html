@@ -64,7 +64,7 @@
                     return [];
                 }
             };
-            const rem_js = getRemoteJSArray();
+            const rem_js = getRemoteJSArray() || [];
             rem_js.forEach(link => {
                 console.log(`Loading scripts from ${link}...`)
                 const scriptTag = document.createElement("script");

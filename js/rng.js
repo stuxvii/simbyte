@@ -228,7 +228,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     //
     mixkey(math.random(), pool);
     math['seed' + rngname] = seedrandom;
-    console.log(math['seed' + rngname]);
 
     // End anonymous scope, and pass initial values.
 })(

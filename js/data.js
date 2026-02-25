@@ -281,6 +281,7 @@ let eventPool = [
         description: "While walking down the street, a man pickpocketed you and stole 10 dollars!.",
         chance: 0.1,
         minAge: 4,
+        criteria: (p) => p.money > 10,
         effect: (p) => {
             p.money -= 10;
             p.happiness -= 5;
