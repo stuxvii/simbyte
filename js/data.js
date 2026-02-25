@@ -290,7 +290,7 @@ let eventPool = [
     new LifeEvent({
         title: "Under the bus.",
         description: "While in recess, you got dared to pull on " + girl_names[rand_int(girl_names.length)] + "'s hair and now shes demanding to know who did it.",
-        chance: 1,
+        chance: 0.1,
         minAge: 6,
         maxAge: 11,
         effect: (p) => {
@@ -309,6 +309,34 @@ let eventPool = [
                         p.happiness -= 10;
                         p.intelligence += 10;
                         print("You confessed and said that you did it.");
+                    }
+                }
+            ]);
+        }
+    }),
+    new LifeEvent({
+        title: "Spelling b or bee?.",
+        description: "Your school is having a spelling bee",
+        chance: 0.1,
+        minAge: 6,
+        maxAge: 11,
+        effect: (p) => {
+            presentChoice("What do you do?", [
+                {
+                    text: "Sure. why not.",
+                    callback: () => {
+                    if (p.intelligence >= 75) {
+                            p.happiness += 30;
+                            p.money += 20;
+                            print("You played and you won! they gave you a 20 dollar prize.");
+                        } else {
+                            p.happiness -= 10;
+                            print("You lost")
+                    }
+                }},
+                {
+                    text: "It's not for me.",
+                    callback: () => {
                     }
                 }
             ]);
