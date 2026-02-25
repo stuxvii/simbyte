@@ -143,9 +143,41 @@ let eventPool = [
         chance: 1.,
         minAge: 18,
         maxAge: 18,
-    })
-];
+    }),
+    new LifeEvent({
+        title: "I'm Interested...",
+        description: "There's an old person in an alleyway promising you happiness",
+        chance: 0.5,
+        minAge: 14,
+        maxAge: 40,
+        effect: (p) => {
+            presentChoice("What do you do?", [
+                {
+                    text: "Accept the deal.",
+                    callback: () => { 
+                        if (rand_int(2)) {
+                            p.happiness += 15;
+                            p.health += 15;
+                            print("He gave you a smoothie and a cookie."); 
+                         } else {
+                             p.effects.push(addictions["nicotine"])
+                             update_meters();
+                             noticeSFX.play();
+                             print("I think you can figure out what he gave you."); 
 
+                    }
+                }},
+                {
+                    text: "Leave.",
+                    callback: () => {
+                        print("You left safely.");
+                    }
+                }
+            ]);
+        }
+    }),
+ ];
+ 
 let addictions = {
     nicotine: new Effect({
         health: -5,
@@ -164,6 +196,7 @@ let addictions = {
         name: "Alcohol",
         description: "Numbs the mind."
     }),
+    
 }
 
 let consumables = {
