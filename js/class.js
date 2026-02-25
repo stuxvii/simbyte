@@ -82,10 +82,10 @@ class Relative {
 }
 
 class LifeEvent {
-    constructor({title, description, chance, minAge = 0, maxAge = 100, criteria = () => true, effect = () => {}}) {
+    constructor({title, description, chance = () => 0.0, minAge = 0, maxAge = 100, criteria = () => true, effect = () => {}}) {
         this.title = title;
         this._description = description;
-        this.chance = chance; // 0.0 to 1.0
+        this._chance = chance;
         this.minAge = minAge;
         this.maxAge = maxAge;
         this.criteria = criteria; // function that returns true/false
@@ -96,6 +96,12 @@ class LifeEvent {
         return typeof this._description === 'function' 
             ? this._description() 
             : this._description;
+    }
+
+    get chance() {
+        return typeof this._chance === 'function' 
+            ? this._chance() 
+            : this._chance;
     }
 
     isEligible(person) {
