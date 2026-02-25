@@ -4,7 +4,7 @@ let surnames = ["Smith", "Johnson", "Bocse", "Codon", "Williams", "Brown", "Jone
 let birth_reasons = ["i was born in a normal, healthy way.","i was born after my father's condom broke","i was summoned at a cult ritual","i was born in a normal way, however my mother died to due maternal death","i was an inhome birth"]
 let eventPool = [
     new LifeEvent({
-        title: "Plis No BroColly.",
+        title: "Plis No Brocoli.",
         description: () => 0 == rand_int(2) 
             ? "Your father is forcing you to eat your greens." 
             : "Your mother is forcing you to eat your greens.",
@@ -332,7 +332,7 @@ let eventPool = [
                             print("You played and you won! they gave you a 20 dollar prize.");
                         } else {
                             p.happiness -= 10;
-                            print("You lost")
+                            print("You lost.")
                     }
                 }},
                 {
@@ -342,6 +342,37 @@ let eventPool = [
                 }
             ]);
         }
+    }),
+    new LifeEvent({
+        title: "",
+        description: "Your mother's friend won the 1 million dollar lottery, She has now moved to Dubai.",
+        chance: 0.01,
+    }),
+    new LifeEvent({
+        title: "",
+        description: "In history class today, you found out about this one serial killer who killed everyone with hot dogs.",
+        chance: 0.01,
+    }),
+     new LifeEvent({
+        title: "",
+        description: "An elderly woman was featured on the television show called Dennis Talks. She had a heart attack live.",
+        chance: 0.01,
+    }),
+    new LifeEvent({
+        title: "",
+        description: "On the news today, theres was headline where a man was arrested for finishing a singular grape in 3 bites.",
+        chance: 0.01,
+    }),
+    new LifeEvent({
+        title: "",
+        description: "A fight at school happened today.",
+        chance: 0.01,
+        minage: 6
+    }),
+    new LifeEvent({
+        title: "",
+        description: "People kept talking about something called LSDblox? I don't know what that is though.",
+        chance: 0.01,
     }),
 ];
  
