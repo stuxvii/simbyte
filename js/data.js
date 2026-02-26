@@ -161,6 +161,7 @@ let choiceEventPool = [
                     callback: () => {
                         p.money += 50;
                         p.happiness += 5;
+                        p.karma -= 5;
                         print("You're $50 richer. No regrets.");
                     }
                 },
@@ -169,6 +170,7 @@ let choiceEventPool = [
                     callback: () => {
                         p.happiness += 20;
                         p.intelligence += 2;
+                        p.karma += 5;
                         print("The owner was so grateful! You feel like a saint.");
                     }
                 }
@@ -251,6 +253,7 @@ let choiceEventPool = [
                     callback: () => {
                         p.happiness += 10;
                         p.intelligence -= 10;
+                        p.karma -= 20;
                         print("You lied and said that " + boy_names[rand_int(boy_names.length)] + " did it.");
                     }
                 },
@@ -259,6 +262,7 @@ let choiceEventPool = [
                     callback: () => {
                         p.happiness -= 10;
                         p.intelligence += 10;
+                        p.karma += 20;
                         print("You confessed and said that you did it.");
                     }
                 }
@@ -401,6 +405,15 @@ let addictions = {
         name: "Alcohol",
         description: "Numbs the mind."
     }),
+    coke: new Effect({
+        health: -20,
+        happiness: -30,
+        intelligence: -40,
+        monetary: -100,
+        icon: "🧂",
+        name: "Cocaine",
+        description: "Always gets confused with the other type of coke."
+    }),
 }
 
 let sickness = {
@@ -427,6 +440,14 @@ let sickness = {
         icon: "❄",
         name: "Common cold",
         description: "You miss the time you could breathe through your nose."
+    }),
+     anxiety: new Effect({
+        health: -25,
+        happiness: -20,
+        monetary: 0,
+        icon: "😦",
+        name: "Anxiety",
+        description: "The straw that broke the camels back."
     }),
 }
 
@@ -467,6 +488,33 @@ let consumables = {
         bitterness: 0.8,
         crunchyness: 0.1,
         widthdrawal: addictions["alcoholism"],
+        price: 5
+    }),
+    preztels: new Consumable({
+        name: "Bag of preztels",
+        softness: 0.0,
+        sweetness: 0.1,
+        spicyness: 0.0,
+        bitterness: 0.4,
+        crunchyness: 1.0,
+        price: 2
+    }),
+    juice: new Consumable({
+        name: "Juice box",
+        softness: 1.0,
+        sweetness: 0.7,
+        spicyness: 0.0,
+        bitterness: 0.0,
+        crunchyness: 0.0,
+        price: 3
+    }),
+    soda: new Consumable({
+        name: "Soda",
+        softness: 1.0,
+        sweetness: 0.9,
+        spicyness: 0.0,
+        bitterness: 0.7,
+        crunchyness: 0.0,
         price: 5
     }),
 };

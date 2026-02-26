@@ -125,6 +125,7 @@ class Person {
         looks = rand_int(100),
         health = 80 + rand_int(20), // cant be unfair with everything
         strength = 80,
+        karma = 50,
     } = {}) {
         this.age = age;
         this.lifeExpectancy = lifeExpectancy;
@@ -143,6 +144,7 @@ class Person {
         this.health = health;
         this.respect = (this.happiness + this.looks)/2;
         this.strength = strength;
+        this.karma = karma;
 
         this.sweetness = rand_int(100) / 100;
         this.spicyness = rand_int(100) / 100;
