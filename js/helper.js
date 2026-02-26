@@ -225,7 +225,7 @@ function createTreeHTML(node) {
 }
 
 function processYearlyEvents(person) {
-    const eligibleEvents = eventPool.filter(ev => ev.isEligible(person));
+    const eligibleEvents = eventPool.flat().filter(ev => ev.isEligible(person));
 
     for (let e in your.effects) {
         const effect = your.effects[e];

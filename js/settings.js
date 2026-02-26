@@ -43,66 +43,47 @@ const updateRemoteJS = (val) => {
 const styleTag = el("style", { id: "dynamic-style", textContent: getCSS() });
 document.head.append(styleTag);
 
-const createOldFontCheckbox = () => {
-    const input = el("input", {
+const createSettingsView = () => {
+    const oldFontCheckbox = el("input", {
         checked: getOldFont(),
         type: "checkbox",
         id: "oldFontCheckbox",
         oninput: (e) => updateOldFont(e.target.checked)
     });
-
-    return el("div", {}, [
-        input,
-        el("label", { 
-            textContent: " Old font",
-            for: "oldFontCheckbox",
-        }),
-    ]);
-};
-
-const createCustomJSView = () => {
-    const textarea = el("textarea", {
-        value: getCustomJS(),
-        spellcheck: false,
+    const customJsTextarea = el("textarea", {
+        value: getCustomJS(),spellcheck: false,
         oninput: (e) => updateJS(e.target.value)
     });
-
-    return el("div", { className: "flexColumn" }, [
-        el("span", { 
-            textContent: "CustomJS", 
-        }),
-        textarea
-    ]);
-};
-
-const createRemoteJSView = () => {
-    const textarea = el("textarea", {
-        value: getRemoteJS(),
-        spellcheck: false,
+    const remoteJsTextarea = el("textarea", {
+        value: getRemoteJS(),spellcheck: false,
         oninput: (e) => updateRemoteJS(e.target.value)
     });
-
-    return el("div", { className: "flexColumn" }, [
-        el("span", { 
-            textContent: "Remote JS (Links separated by newlines)", 
-        }),
-        textarea
-    ]);
-};
-
-const createQuickCSSView = () => {
-    const textarea = el("textarea", {
-        value: getCSS(),
-        spellcheck: false,
+    const quickCssTextarea = el("textarea", {
+        value: getCSS(),spellcheck: false,
         oninput: (e) => updateCSS(e.target.value)
     });
 
-    return el("div", { className: "flexColumn" }, [
-        el("span", { 
-            textContent: "QuickCSS", 
-        }),
-        textarea
-    ]);
+    return [
+        el("div", {}, [
+            oldFontCheckbox,
+            el("label", {
+                textContent: " Old font",
+                for: "oldFontCheckbox",
+            }),
+        ]),
+        el("div", { className: "flexColumn" }, [
+            el("span", {textContent: "CustomJS",}),
+            customJsTextarea
+        ]),
+        el("div", { className: "flexColumn" }, [
+            el("span", {textContent: "Remote JS (Links separated by newlines)",}),
+            remoteJsTextarea
+        ]),
+        el("div", { className: "flexColumn" }, [
+            el("span", {textContent: "QuickCSS",}),
+            quickCssTextarea
+        ]),
+    ]
 };
 
 const createSaveView = () => {
@@ -168,7 +149,11 @@ const openMenu = (content) => {
     toggleVisibility(popupContainer);
 };
 
-document.getElementById("dynamic-font-style").textContent = getOldFont() ? ":root{--font: pixel}" : "";
+if (getOldFont() == "true") {
+    document.getElementById("dynamic-font-style").textContent = ":root{--font: pixel}";
+} else {
+    document.getElementById("dynamic-font-style").textContent = "";
+}
 
 savePanel.addEventListener("click", () => openMenu(createSaveView()));
-showSettings.addEventListener("click", () => openMenu([createOldFontCheckbox(), createQuickCSSView(), createRemoteJSView(), createCustomJSView()]));
+showSettings.addEventListener("click", () => openMenu(createSettingsView()));
