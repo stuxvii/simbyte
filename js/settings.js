@@ -157,3 +157,30 @@ if (getOldFont() == "true") {
 
 savePanel.addEventListener("click", () => openMenu(createSaveView()));
 showSettings.addEventListener("click", () => openMenu(createSettingsView()));
+
+
+const js = getCustomJS();
+if (js) {
+    console.log("Loading quick scripts...")
+    const scriptTag = document.createElement("script");
+    scriptTag.textContent = js;
+    injectedScripts.append(scriptTag);
+}
+
+const getRemoteJSArray = () => {
+    try {
+        const remote_js = localStorage.getItem("remote_js");
+        const json = JSON.parse(remote_js);
+        return json;
+    } catch (error) {
+        console.error("Error when parsing the JSON array of remote JavaScript scripts!!!", error);
+        return [];
+    }
+};
+const rem_js = getRemoteJSArray() || [];
+rem_js.forEach(link => {
+    console.log(`Loading scripts from ${link}...`)
+    const scriptTag = document.createElement("script");
+    scriptTag.src = link;
+    injectedScripts.append(scriptTag);
+});
