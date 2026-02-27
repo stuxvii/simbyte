@@ -5,7 +5,8 @@ const stats = {
     happiness: "☺️",
     intelligence: "💡",
     health: "💊",
-    looks: "👁️"
+    looks: "👁️",
+    karma: "👼"
 };
 
 let your = new Person();

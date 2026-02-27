@@ -104,6 +104,7 @@ let choiceEventPool = [
                     text: "Throw your plate at them.",
                     callback: () => {
                         p.health += 5;
+                        p.karma -= 5;
                         print("You were forced to eat it anyways.");
                     }
                 }
@@ -130,7 +131,7 @@ let choiceEventPool = [
                             print("You won and got theirs instead.");
                         } else {
                             p.money = 0;
-                            p.strength += 5; //this is Sline 67 hahahahaha
+                            p.strength += 5;
                             print("You lost the battle (and all your money too).");
                         }
                     }
@@ -151,7 +152,7 @@ let choiceEventPool = [
     new LifeEvent({
         title: "Found a Wallet",
         description: "You found a wallet on the floor with $50 inside.",
-        chance: 0.08,
+        chance: () => (your.karma / 100) / 6,
         minAge: 10,
         maxAge: 70, // cant bend over after that age
         effect: (p) => {
@@ -161,6 +162,7 @@ let choiceEventPool = [
                     callback: () => {
                         p.money += 50;
                         p.happiness += 5;
+                        p.karma -= 10;
                         print("You're $50 richer. No regrets.");
                     }
                 },
@@ -169,6 +171,7 @@ let choiceEventPool = [
                     callback: () => {
                         p.happiness += 20;
                         p.intelligence += 2;
+                        p.karma += 5;
                         print("The owner was so grateful! You feel like a saint.");
                     }
                 }
@@ -224,7 +227,7 @@ let choiceEventPool = [
                             print("You played some damn good games.");
                         } else {
                             p.happiness -= 30;
-                            print("You didn't have enough money")
+                            print("You didn't have enough money.")
                     }
                 }},
                 {
@@ -251,6 +254,7 @@ let choiceEventPool = [
                     callback: () => {
                         p.happiness += 10;
                         p.intelligence -= 10;
+                        p.karma -= 20;
                         print("You lied and said that " + boy_names[rand_int(boy_names.length)] + " did it.");
                     }
                 },
@@ -259,6 +263,7 @@ let choiceEventPool = [
                     callback: () => {
                         p.happiness -= 10;
                         p.intelligence += 10;
+                        p.karma += 20;
                         print("You confessed and said that you did it.");
                     }
                 }
@@ -293,6 +298,7 @@ let choiceEventPool = [
             ]);
         }
     }),
+    
 ];
 
 let ocurranceEventPool = [
@@ -337,7 +343,7 @@ let ocurranceEventPool = [
     new LifeEvent({
         title: "Lucky.",
         description: "You found a dollar while walking down the street.",
-        chance: 0.2,
+        chance: () => (your.karma / 100) / 2,
         minAge: 4,
         effect: (p) => {
             p.money += 1;
@@ -348,9 +354,9 @@ let ocurranceEventPool = [
     new LifeEvent({
         title: "Depression.",
         description: "You have depression.",
-        chance: 0.05,
         minAge: 19,
         maxAge: 60,
+        criteria: (p) => p.happiness < 10,
         effect: (p) => {
             p.effects.push(sickness["depression"])
             noticeSFX.play();
@@ -372,7 +378,7 @@ let ocurranceEventPool = [
         description: "While walking down the street, a man pickpocketed you and stole 10 dollars!.",
         chance: 0.1,
         minAge: 4,
-        criteria: (p) => p.money > 10,
+        criteria: (p) => p.money > 10 && p.karma < 40,
         effect: (p) => {
             p.money -= 10;
             p.happiness -= 5;
@@ -401,6 +407,15 @@ let addictions = {
         name: "Alcohol",
         description: "Numbs the mind."
     }),
+    coke: new Effect({
+        health: -20,
+        happiness: -30,
+        intelligence: -40,
+        monetary: -100,
+        icon: "🧂",
+        name: "Cocaine",
+        description: "Always gets confused with the other type of coke."
+    }),
 }
 
 let sickness = {
@@ -427,6 +442,14 @@ let sickness = {
         icon: "❄",
         name: "Common cold",
         description: "You miss the time you could breathe through your nose."
+    }),
+     anxiety: new Effect({
+        health: -25,
+        happiness: -20,
+        monetary: 0,
+        icon: "😦",
+        name: "Anxiety",
+        description: "The straw that broke the camels back."
     }),
 }
 
@@ -469,9 +492,36 @@ let consumables = {
         widthdrawal: addictions["alcoholism"],
         price: 5
     }),
+    preztels: new Consumable({
+        name: "Bag of preztels",
+        softness: 0.0,
+        sweetness: 0.1,
+        spicyness: 0.0,
+        bitterness: 0.4,
+        crunchyness: 1.0,
+        price: 2
+    }),
+    juice: new Consumable({
+        name: "Juice box",
+        softness: 1.0,
+        sweetness: 0.7,
+        spicyness: 0.0,
+        bitterness: 0.0,
+        crunchyness: 0.0,
+        price: 3
+    }),
+    soda: new Consumable({
+        name: "Soda",
+        softness: 1.0,
+        sweetness: 0.9,
+        spicyness: 0.0,
+        bitterness: 0.7,
+        crunchyness: 0.0,
+        price: 5
+    }),
 };
 
-let shopItems = [consumables["potato_chips"], consumables["alfajor"], consumables["cigarettes"], consumables["beer"]];
+let shopItems = [consumables["potato_chips"], consumables["alfajor"], consumables["cigarettes"], consumables["beer"], consumables["preztels"], consumables["juice"], consumables["soda"]];
 
 let infoBoxPanels = {
     family: () => {
