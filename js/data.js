@@ -152,7 +152,7 @@ let choiceEventPool = [
     new LifeEvent({
         title: "Found a Wallet",
         description: "You found a wallet on the floor with $50 inside.",
-        chance: (p) => (p.karma / 100) / 6,
+        chance: () => (your.karma / 100) / 6,
         minAge: 10,
         maxAge: 70, // cant bend over after that age
         effect: (p) => {
@@ -343,7 +343,7 @@ let ocurranceEventPool = [
     new LifeEvent({
         title: "Lucky.",
         description: "You found a dollar while walking down the street.",
-        chance: (p) => (p.karma / 100) / 2,
+        chance: () => (your.karma / 100) / 2,
         minAge: 4,
         effect: (p) => {
             p.money += 1;
@@ -521,7 +521,7 @@ let consumables = {
     }),
 };
 
-let shopItems = [consumables["potato_chips"], consumables["alfajor"], consumables["cigarettes"], consumables["beer"]];
+let shopItems = [consumables["potato_chips"], consumables["alfajor"], consumables["cigarettes"], consumables["beer"], consumables["preztels"], consumables["juice"], consumables["soda"]];
 
 let infoBoxPanels = {
     family: () => {
