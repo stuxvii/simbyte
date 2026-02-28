@@ -107,6 +107,20 @@ const createSaveView = () => {
     ];
 };
 
+const createInfoView = () => {
+    return [
+        el("h1", {
+            textContent: "simbyte",
+            className: "old-font"
+        }),
+        el("span", {textContent: "2026, Licensed under the AGPL",}),
+        el("span", {textContent: "Programmed by acidbox (aka stuxvii)",}),
+        el("span", {textContent: "Concept by oxycodone",}),
+        el("span", {textContent: "Content by acidbox, oxycodone, hydrosu, and all contributors",}),
+        el("a", {textContent: "GitHub", href: "https://github.com/stuxvii/simbyte"}),
+    ];
+};
+
 function handleSave() {
     const blob = new Blob([generateSaveFile()], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -155,10 +169,6 @@ if (getOldFont() == "true") {
     document.getElementById("dynamic-font-style").textContent = "";
 }
 
-savePanel.addEventListener("click", () => openMenu(createSaveView()));
-showSettings.addEventListener("click", () => openMenu(createSettingsView()));
-
-
 const js = getCustomJS();
 if (js) {
     console.log("Loading quick scripts...")
@@ -179,8 +189,108 @@ const getRemoteJSArray = () => {
 };
 const rem_js = getRemoteJSArray() || [];
 rem_js.forEach(link => {
+    if (link == "") return;
     console.log(`Loading scripts from ${link}...`)
     const scriptTag = document.createElement("script");
     scriptTag.src = link;
     injectedScripts.append(scriptTag);
 });
+
+class InsideWindow {
+    constructor({
+        title = "",
+        body,
+        resizeable = false,
+        xpos = 50,
+        ypos = 20,
+    }) {
+        this.title = title;
+        this.body = body;
+        this.resizeable = resizeable;
+        this.xpos = xpos;
+        this.ypos = ypos;
+    }
+}
+
+let activeWindowData;
+let activeWindowElement;
+
+let windows = [];
+
+let lastMouseMoveX = 0;
+let lastMouseMoveY = 20;
+
+const openWindow = (passedInWindow) => {
+    if (windows.includes(passedInWindow)) return;
+    let windowContainer = el("div", { className: "popupBox" });
+    let windowContainerTopbar = el("div", { className: "window-topbar"}, [
+        el("span", { textContent: passedInWindow.title}),
+    ]);
+
+    let windowCloseButton = el("span", { textContent: "X"});
+    windowCloseButton.addEventListener("click", (_) => {
+        windowContainer.remove();
+        windowContainerTopbar.remove();
+        windows.splice(windows.indexOf(passedInWindow), 1);
+        activeWindowData = null;
+        activeWindowElement = null;
+    })
+
+    windowContainerTopbar.append(windowCloseButton);
+    windowContainer.append(windowContainerTopbar);
+
+    windowContainer.style.left = `${passedInWindow.xpos}px`;
+    windowContainer.style.top = `${passedInWindow.ypos}px`;
+
+    if (Array.isArray(passedInWindow.body)) { passedInWindow.body.forEach(c => windowContainer.append(c));
+    } else { windowContainer.append(passedInWindow.body); }
+    
+    windowContainer.addEventListener("mousedown", (e) => {document.body.append(windowContainer)});
+    windowContainerTopbar.addEventListener("mousedown", (e) =>{
+        lastMouseMoveX = e.clientX;
+        lastMouseMoveY = e.clientY;
+        if (activeWindowElement) activeWindowElement.style.zIndex = null;
+        activeWindowElement = windowContainer;
+        activeWindowData = passedInWindow;
+    });
+    document.body.append(windowContainer)
+    windows.push(passedInWindow)
+};
+    
+window.addEventListener("mousemove", (e) => {
+    if (!activeWindowElement) return;
+
+    const deltaX = e.clientX - lastMouseMoveX;
+    const deltaY = e.clientY - lastMouseMoveY;
+
+    activeWindowData.xpos += deltaX;
+    activeWindowData.ypos += deltaY;
+
+    activeWindowElement.style.left = `${activeWindowData.xpos}px`;
+    activeWindowElement.style.top = `${activeWindowData.ypos}px`;
+    lastMouseMoveX = e.clientX;
+    lastMouseMoveY = e.clientY;
+});
+
+window.addEventListener("mouseup", (e) =>{
+    activeWindowElement = null;
+});
+
+let windowSettings = new InsideWindow({
+    title: "Settings",
+    body: createSettingsView()
+})
+
+let windowInfo = new InsideWindow({
+    title: "simver",
+    body: createInfoView(),
+})
+
+let windowSave = new InsideWindow({
+    title: "Save management",
+    body: createSaveView(),
+})
+
+savePanel.addEventListener("click", () => openWindow(windowSave));
+showInfo.addEventListener("click", () => openWindow(windowInfo));
+showSettings.addEventListener("click", () => openWindow(windowSettings));

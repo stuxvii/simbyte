@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <link href="game.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/twemoji@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -17,6 +18,7 @@
             <div>
                 <span class="button" id="showFamilyTree">👪</span>
                 <span class="button" id="toggleFullscreen">🔲</span>
+                <span class="button" id="showInfo">ℹ️</span>
                 <span class="button" id="savePanel">💾</span>
                 <span class="button" id="showSettings">⚙️</span>
             </div>
@@ -36,7 +38,7 @@
     </div>
     <div id="infoBox" style="display:none; " class="infoBox"></div>
     <div id="popupContainer" class="blockOutBG" style="display:none">
-        <div id="popupBox">
+        <div id="popupBox" class="popupBox">
         </div>
     </div>
     <script src="js/rng.js"></script>

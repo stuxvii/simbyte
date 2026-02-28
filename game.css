@@ -26,6 +26,8 @@
     src: url("/fnt/terminus_bold.ttf");
 }
 
+.old-font {font-family: pixel;}
+
 body {
     font-family: var(--font);
     text-shadow:
@@ -208,11 +210,12 @@ textarea:focus {
     align-items: center;
 }
 
-#popupBox {
+.popupBox {
     padding: 1rem;
     background-color: var(--background-color);
     border: 1px solid var(--color);
 
+    position: absolute;
     display: flex;
     flex-direction: column;
     align-items: baseline;
@@ -300,4 +303,18 @@ right connector from last child*/
 /*Thats all. I hope you enjoyed it.
 Thanks :)*/
 
-.btn-danger { background-color: var(--danger-color); }
+.btn-danger {background-color: var(--danger-color)}
+.window-topbar {
+    position: absolute;
+    border: 1px solid var(--color);
+    width: -webkit-fill-available;
+    left: -1px;
+    bottom: calc(100% - 0px);
+    transform-origin: bottom left;
+    padding: 2px;
+    background-color: var(--shadow-color);
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: calc(100% - 4px);
+}
