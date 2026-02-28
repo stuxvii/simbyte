@@ -87,13 +87,12 @@ const createSettingsView = () => {
 };
 
 const createSaveView = () => {
-    const fileInput = el("input", { type: "file" });
+    const fileInput = el("input", { type: "file", style: "display: none;" });
 
     return [
-        fileInput,
         el("button", {
             textContent: "Load data",
-            onclick: () => handleLoad(fileInput.files[0])
+            onclick: () => handleLoad(fileInput)
         }),
         el("button", {
             textContent: "Save data",
@@ -132,14 +131,20 @@ function handleSave() {
     URL.revokeObjectURL(url);
 }
 
-function handleLoad(file) {
-    if (!file || !confirm("Overwrite current game?")) return;
-    const reader = new FileReader();
-    reader.onload = e => {
-        localStorage.setItem("save", e.target.result);
-        location.reload();
-    };
-    reader.readAsText(file);
+function handleLoad(fileInputElement) {
+    fileInputElement.value = "";
+    fileInputElement.addEventListener("change", () => {
+        const file = fileInputElement.files[0]
+        if (!file || !confirm("Overwrite current game?")) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            localStorage.setItem("save", e.target.result);
+            location.reload();
+        };
+        reader.readAsText(file);
+    });
+        
+    fileInputElement.click();
 }
 
 function handleReset() {
@@ -244,7 +249,7 @@ const openWindow = (passedInWindow) => {
 
     if (Array.isArray(passedInWindow.body)) { passedInWindow.body.forEach(c => windowContainer.append(c));
     } else { windowContainer.append(passedInWindow.body); }
-    
+
     windowContainer.addEventListener("mousedown", (e) => {document.body.append(windowContainer)});
     windowContainerTopbar.addEventListener("mousedown", (e) =>{
         lastMouseMoveX = e.clientX;

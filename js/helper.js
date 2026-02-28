@@ -240,13 +240,12 @@ function processYearlyEvents(person) {
         if (rand_int(100) / 100 < event.chance) {
             header(event.title);
             print(event.description);
+            if (event.effect())
             event.effect(person);
         }
     });
 
     Object.entries(stats).forEach(([key, _]) => {
-        if (effect[key]) {
-            person[key] = clamp(person[key], 0, 100);
-        }
+        person[key] = clamp(person[key], 0, 100);
     });
 }
