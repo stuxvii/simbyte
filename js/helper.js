@@ -244,8 +244,9 @@ function processYearlyEvents(person) {
         }
     });
 
-    person.happiness = clamp(person.happiness, 0, 100);
-    person.intelligence = clamp(person.intelligence, 0, 100);
-    person.looks = clamp(person.looks, 0, 100);
-    person.health = clamp(person.health, 0, 100);
+    Object.entries(stats).forEach(([key, _]) => {
+        if (effect[key]) {
+            person[key] = clamp(person[key], 0, 100);
+        }
+    });
 }
