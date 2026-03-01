@@ -240,7 +240,7 @@ function processYearlyEvents(person) {
         if (rand_int(100) / 100 < event.chance) {
             header(event.title);
             print(event.description);
-            if (event.effect())
+            if (Object.hasOwn(event, 'effect'))
             event.effect(person);
         }
     });

@@ -250,7 +250,12 @@ const openWindow = (passedInWindow) => {
     if (Array.isArray(passedInWindow.body)) { passedInWindow.body.forEach(c => windowContainer.append(c));
     } else { windowContainer.append(passedInWindow.body); }
 
-    windowContainer.addEventListener("mousedown", (e) => {document.body.append(windowContainer)});
+    windowContainer.addEventListener("mousedown", (e) => {
+        if (activeWindowData == passedInWindow) return;
+        activeWindowElement = windowContainer;
+        activeWindowData = passedInWindow;
+        document.body.append(activeWindowElement);
+    });
     windowContainerTopbar.addEventListener("mousedown", (e) =>{
         lastMouseMoveX = e.clientX;
         lastMouseMoveY = e.clientY;
@@ -270,6 +275,15 @@ window.addEventListener("mousemove", (e) => {
 
     activeWindowData.xpos += deltaX;
     activeWindowData.ypos += deltaY;
+    if (activeWindowData.ypos < 22) {
+        activeWindowData.ypos = 22
+    }
+    if (activeWindowData.xpos < 0) {
+        activeWindowData.xpos = 0
+    }
+    if (activeWindowData.xpos > window.innerWidth - activeWindowElement.getBoundingClientRect().width) {
+        activeWindowData.xpos = window.innerWidth - activeWindowElement.getBoundingClientRect().width
+    }
 
     activeWindowElement.style.left = `${activeWindowData.xpos}px`;
     activeWindowElement.style.top = `${activeWindowData.ypos}px`;
@@ -299,3 +313,5 @@ let windowSave = new InsideWindow({
 savePanel.addEventListener("click", () => openWindow(windowSave));
 showInfo.addEventListener("click", () => openWindow(windowInfo));
 showSettings.addEventListener("click", () => openWindow(windowSettings));
+
+if (navigator.maxTouchPoints > 0) alert("simbyte is best enjoyed in a desktop.");
