@@ -34,7 +34,7 @@
 .old-font {font-family: pixel;}
 
 body {
-    font-family: var(--font), twemoji;
+    font-family: var(--font);
     text-shadow:
         -1px -1px 0 var(--shadow-color),
         1px -1px 0 var(--shadow-color),

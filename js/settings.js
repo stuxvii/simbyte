@@ -1,6 +1,7 @@
 const getCSS = () => localStorage.getItem("quick_css") || "";
 const getCustomJS = () => localStorage.getItem("custom_js") || "";
-const getOldFont = () => localStorage.getItem("old_font") || false;
+const getTwemojiEnabled = () => localStorage.getItem("twemoji") || false;
+console.log(getTwemojiEnabled())
 const getRemoteJS = () => {
     try {
         const remote_js = localStorage.getItem("remote_js");
@@ -25,9 +26,9 @@ const fontStyleTag = el("style", { id: "dynamic-font-style" });
 document.head.append(fontStyleTag);
 
 const updateJS = (val) => localStorage.setItem("custom_js", val);
-const updateOldFont = (val) => {
-    localStorage.setItem("old_font", val)
-    document.getElementById("dynamic-font-style").textContent = val ? ":root{--font: pixel}" : "";
+const updateTwemojiEnabled = (val) => {
+    localStorage.setItem("twemoji", val)
+    document.getElementById("dynamic-font-style").textContent = val ? "body{font-family: var(--font), twemoji}" : "";
 };
 
 const updateRemoteJS = (val) => {
@@ -40,12 +41,17 @@ const styleTag = el("style", { id: "dynamic-style", textContent: getCSS() });
 document.head.append(styleTag);
 
 const createSettingsView = () => {
-    const oldFontCheckbox = el("input", {
-        checked: getOldFont(),
+    let twemojiCheckbox = el("input", {
         type: "checkbox",
-        id: "oldFontCheckbox",
-        oninput: (e) => updateOldFont(e.target.checked)
+        id: "twemojiCheckbox",
+        oninput: (e) => updateTwemojiEnabled(e.target.checked)
     });
+    if (getTwemojiEnabled() === "true") {
+        twemojiCheckbox.checked = true;
+    } else if (getTwemojiEnabled() == "false") {
+        twemojiCheckbox.checked = false;
+    }
+
     const customJsTextarea = el("textarea", {
         value: getCustomJS(),spellcheck: false,
         oninput: (e) => updateJS(e.target.value)
@@ -61,10 +67,10 @@ const createSettingsView = () => {
 
     return [
         el("div", {}, [
-            oldFontCheckbox,
+            twemojiCheckbox,
             el("label", {
-                textContent: " Old font",
-                for: "oldFontCheckbox",
+                textContent: " Twemoji",
+                htmlFor: "twemojiCheckbox",
             }),
         ]),
         el("div", { className: "flexColumn" }, [
@@ -167,8 +173,8 @@ const openMenu = (content) => {
     toggleVisibility(popupContainer);
 };
 
-if (getOldFont() == "true") {
-    document.getElementById("dynamic-font-style").textContent = ":root{--font: pixel}";
+if (getTwemojiEnabled() == "true") {
+    document.getElementById("dynamic-font-style").textContent = "body{font-family: var(--font), twemoji}";
 } else {
     document.getElementById("dynamic-font-style").textContent = "";
 }
