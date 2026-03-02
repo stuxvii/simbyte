@@ -323,3 +323,7 @@ Thanks :)*/
     justify-content: space-between;
     width: calc(100% - 4px);
 }
+
+::-webkit-scrollbar {
+    display: none;
+}
