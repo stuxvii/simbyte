@@ -23,16 +23,32 @@ ageUp.addEventListener("click", function () {
     tickingSFX.play();
 });
 
-showShop.addEventListener("click", function (e) {
+let activitiesWindow = new InsideWindow({
+    title: "Activities",
+    body: el("div"),
+})
+
+showActivities.addEventListener("click", (e) => {
     if (!canInteract) return;
-    currentIBPanel = infoBoxPanels.shop;
-    update_meters();
-    infoBox.style.display = "flex";
+    const tempElement = el("div", { className: "flexColumn"});
+    Object.entries(activitiesList).forEach(activity => {
+        let activityElement = el("span", { className: "button", textContent: activity[1].name});
+        activityElement.addEventListener("click", () => {
+            openWindow(activity[1].callback());
+        })
+        tempElement.append(activityElement);
+    });
+    activitiesWindow.body = tempElement;
+    openWindow(activitiesWindow);
 });
 
-showFamilyTree.addEventListener("click", function (e) {
+let familyTree = new InsideWindow({
+    title: "Family Tree",
+    body: el("div", { classList: "tree" }, [el("ul", { innerHTML: createTreeHTML(your) })]),
+})
+
+showFamilyTree.addEventListener("click", (e) => {
     if (!canInteract) return;
-    currentIBPanel = infoBoxPanels.family;
-    update_meters();
-    infoBox.style.display = "flex";
+    familyTree.body = el("div", { classList: "tree" }, [el("ul", { innerHTML: createTreeHTML(your) })]);
+    openWindow(familyTree);
 });

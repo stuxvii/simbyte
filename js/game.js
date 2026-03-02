@@ -1,6 +1,12 @@
 function begin() {
-    let saveJSON = localStorage.getItem("save");
-    let save = JSON.parse(saveJSON);
+    let save;
+    try {
+        save = JSON.parse(localStorage.getItem("save"));
+    } catch (error) {
+        print(`An error when loading your savefile was detected. ${error}`);
+        print(`Please load another save file using the 💾 menu.`);
+        return;
+    }
 
     if (save && save.characterData) {
         your = save.characterData;
@@ -18,7 +24,7 @@ function begin() {
                     case "br":
                         space();
                         break;
-                
+
                     default:
                         break;
                 }

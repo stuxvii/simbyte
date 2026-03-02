@@ -1,7 +1,7 @@
 let meter_elements = {};
 const stats = {
     strength: "💪",
-    respect: "🤝",
+    respect: "🎖️",
     happiness: "☺️",
     intelligence: "💡",
     health: "💊",
@@ -13,7 +13,6 @@ let your = new Person();
 let canInteract = true;
 let pastGenerationsAmount = 2;
 let chatlogs = [];
-let currentIBPanel = infoBoxPanels.family;
 
 Object.entries(stats).forEach(([key, icon]) => {
     const whateverdiv = document.createElement("div");
@@ -78,8 +77,15 @@ function header(urtext) {
     });
 }
 
+const el = (tag, props = {}, children = []) => {
+    const element = document.createElement(tag);
+    Object.assign(element, props);
+    children.forEach(child => element.append(child));
+    return element;
+};
+
 function clamp(num, min, max) {
-    return num <= min ? min: num >= max? max: num
+    return num<=min?min:num>=max?max:num
 }
 
 function generateSaveFile() {
@@ -105,8 +111,6 @@ function update_meters() {
     });
 
     infoBox.append(close_btn);
-
-    currentIBPanel.call();
 
     effectsList.innerHTML = null;
 
@@ -204,6 +208,11 @@ function generateAncestors(person, generationsLeft) {
     person.inheritTraits();
 }
 
+/**
+ * Creates a family tree using HTML
+ * @param {person} node 
+ * @returns HTML tree portion as string
+ */
 function createTreeHTML(node) {
     let el = node;
     if (!el.name) el = el["person"];

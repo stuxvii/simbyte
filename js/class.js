@@ -111,6 +111,20 @@ class LifeEvent {
     }
 }
 
+class InsideWindow {
+    constructor({
+        title = "",
+        body,
+        xpos = 0,
+        ypos = 0,
+    }) {
+        this.title = title;
+        this.body = body;
+        this.xpos = xpos;
+        this.ypos = ypos;
+    }
+}
+
 class Person {
     constructor({
         age = 0,

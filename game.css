@@ -17,6 +17,11 @@
 }
 
 @font-face {
+    font-family: twemoji;
+    src: url("/fnt/twemoji.woff2");
+}
+
+@font-face {
     font-family: pixel;
     src: url("/fnt/04B03.ttf");
 }
@@ -29,7 +34,7 @@
 .old-font {font-family: pixel;}
 
 body {
-    font-family: var(--font);
+    font-family: var(--font), twemoji;
     text-shadow:
         -1px -1px 0 var(--shadow-color),
         1px -1px 0 var(--shadow-color),
