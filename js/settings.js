@@ -1,7 +1,7 @@
 const getCSS = () => localStorage.getItem("quick_css") || "";
 const getCustomJS = () => localStorage.getItem("custom_js") || "";
 const getTwemojiEnabled = () => localStorage.getItem("twemoji") || false;
-console.log(getTwemojiEnabled())
+
 const getRemoteJS = () => {
     try {
         const remote_js = localStorage.getItem("remote_js");
