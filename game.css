@@ -2,6 +2,7 @@
     --color: rgb(255,255,255);
     --background-color: rgb(55,55,55);
     --shadow-color: rgb(0,0,0);
+    --titlebar-color: rgb(0,0,0);
     --danger-color: rgb(127,0,0);
     --bezier: cubic-bezier(0,0,.58,1);
     --animation-speed: 0.25s;
@@ -187,7 +188,6 @@ textarea:focus {
 #effectsList {
     position: absolute;
     bottom: var(--spacing);
-    right: 10px;
     display: flex;
     align-items: end;
 }
@@ -196,6 +196,7 @@ textarea:focus {
     padding: var(--spacing);
     border: var(--color) 1px solid;
     width: fit-content;
+    background-color: var(--background-color);
 }
 
 .moveToLeft {
@@ -317,7 +318,7 @@ Thanks :)*/
     bottom: calc(100% - 0px);
     transform-origin: bottom left;
     padding: 2px;
-    background-color: var(--shadow-color);
+    background-color: var(--titlebar-color);
     display:flex;
     flex-direction: row;
     justify-content: space-between;
@@ -326,4 +327,11 @@ Thanks :)*/
 
 ::-webkit-scrollbar {
     display: none;
+}
+
+.window-close-btn {
+    background-color: var(--danger-color);
+    text-align: center;
+    width: 16px;
+    height: 17px;
 }

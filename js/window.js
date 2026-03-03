@@ -3,6 +3,7 @@ let activeWindowElement;
 let mouseIsDown;
 
 let windows = [];
+let windowElements = [];
 
 let lastMouseMoveX = 0;
 let lastMouseMoveY = 20;
@@ -14,17 +15,20 @@ const openWindow = (passedInWindow) => {
         el("span", { textContent: passedInWindow.title}),
     ]);
 
-    let windowCloseButton = el("span", { textContent: "X"});
+    let windowCloseButton = el("span", { textContent: "X", className: "window-close-btn"});
+    
     windowCloseButton.addEventListener("click", (_) => {
+        windowElements.splice(windowElements.indexOf(windowContainer), 1);
+        windows.splice(windows.indexOf(passedInWindow), 1);
         windowContainer.remove();
         windowContainerTopbar.remove();
-        windows.splice(windows.indexOf(passedInWindow), 1);
         activeWindowData = null;
         activeWindowElement = null;
     })
 
     windowContainerTopbar.append(windowCloseButton);
     windowContainer.append(windowContainerTopbar);
+    windowElements.push(windowContainer);
 
     if (passedInWindow.xpos == 0 && passedInWindow.ypos == 0) {
         passedInWindow.ypos = 22+(50*windows.length)
@@ -53,6 +57,7 @@ const openWindow = (passedInWindow) => {
         activeWindowData = passedInWindow;
     });
     document.body.append(windowContainer)
+    passedInWindow.containerElement = windowContainer;
     windows.push(passedInWindow)
 };
     

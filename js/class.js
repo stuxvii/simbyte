@@ -122,6 +122,19 @@ class InsideWindow {
         this.body = body;
         this.xpos = xpos;
         this.ypos = ypos;
+        this.containerElement = null;
+    }
+
+    close() {
+        if (this.containerElement == null) return;
+        this.title = null;
+        this.body = null
+        this.xpos = 0
+        this.ypos = 0
+        windows.splice(windows.indexOf(this), 1);
+        activeWindowData = null;
+        activeWindowElement = null;
+        this.containerElement.remove()
     }
 }
 
@@ -149,8 +162,11 @@ class Person {
         this.surname = surname;
         this.family = family;
         this.canInteract = true;
+        this.isDead = false;
+        this.exhausted = false;
         
-        this.effects = [];
+        this.illnesses = [];
+        this.addictions = [];
 
         this.happiness = happiness; // how happy you are, 50 is neutral, 100 is ecstatic, 0 is depressed
         this.intelligence = intelligence; // how intelligent you are, 0 is stupid, 45 is normal, 75 is smart, 100 is einstein
@@ -171,6 +187,7 @@ class Person {
         let start = new Date(99, 0, 1);
         let end = new Date(99, 11, 31);
         this.birthday = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+        return this
     }
 
     giveParents() {
@@ -223,6 +240,14 @@ class Person {
             (this.intelligence + this.looks)
         );
     }
+
+    kill() {
+        this.canInteract = false;
+        this.isDead = true;
+        this.exhausted = true;
+        this.illnesses = [];
+        this.addictions = [];
+    }
 }
 
 class Occupation {
@@ -244,6 +269,10 @@ class Effect {
         intelligence = 0.0,
         looks = 0.0,
         monetary = 0.0,
+        lifeExpectancyReduction = 0.0,
+
+        // This is a multiplier. if a doctor's base price to cure an effect is 5, and this is 1.0, it'll cost 5. if it's 15.0 it'll cost 75.
+        priceToRemove = 0.0,
 
         icon = "",
         name = "",
@@ -254,6 +283,8 @@ class Effect {
         this.intelligence = intelligence;
         this.looks = looks;
         this.monetary = monetary;
+        this.lifeExpectancyReduction = lifeExpectancyReduction;
+        this.priceToRemove = priceToRemove;
         this.icon = icon;
         this.name = name;
         this.description = description;

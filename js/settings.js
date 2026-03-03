@@ -120,6 +120,7 @@ const createInfoView = () => {
         el("span", {textContent: "Content by acidbox, oxycodone, hydrosu, and all contributors",}),
         el("div", {}, [
             el("a", {textContent: "GitHub", href: "https://github.com/stuxvii/simbyte"}),
+            el("span", {innerHTML: "&nbsp;"}),
             el("a", {textContent: "Discord", href: "https://discord.gg/UhYpXxKxzY"}),
         ]),
     ];

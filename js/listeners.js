@@ -32,6 +32,7 @@ showActivities.addEventListener("click", (e) => {
     if (!canInteract) return;
     const tempElement = el("div", { className: "flexColumn"});
     Object.entries(activitiesList).forEach(activity => {
+        if (your.age < activity[1].minAge) return;
         let activityElement = el("span", { className: "button", textContent: activity[1].name});
         activityElement.addEventListener("click", () => {
             openWindow(activity[1].callback());
@@ -39,6 +40,8 @@ showActivities.addEventListener("click", (e) => {
         tempElement.append(activityElement);
     });
     activitiesWindow.body = tempElement;
+    console.log(!!activitiesWindow.body.childNodes.length)
+    if (!activitiesWindow.body.childNodes.length) activitiesWindow.body = el("span", {textContent: "You have no available activities."})
     openWindow(activitiesWindow);
 });
 

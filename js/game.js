@@ -8,7 +8,7 @@ function begin() {
         return;
     }
 
-    if (save && save.characterData) {
+    if (save && save.characterData && !save.characterData.isDead) {
         your = save.characterData;
         your.birthday = new Date(your.birthday);
         if (save.history) {

@@ -46,6 +46,22 @@ function toggleVisibility(element) {
     }
 }
 
+function alert(urtext) {
+    let error = new InsideWindow({
+        title: "Alert",
+        body: el("div", {}, [
+            el("span", { textContent: urtext})
+        ]),
+        xpos: window.innerWidth/3,
+        ypos: window.innerHeight/3,
+    });
+
+    error.xpos += 10*windows.length;
+    error.ypos += 10*windows.length;
+
+    openWindow(error);
+}
+
 function print(urtext) {
     let txt = document.createElement("span");
     txt.textContent = urtext;
@@ -114,8 +130,8 @@ function update_meters() {
 
     effectsList.innerHTML = null;
 
-    for (let e in your.effects) {
-        const effect = your.effects[e];
+    for (let e in [your.addictions, your.illnesses].flat()) {
+        const effect = [your.addictions, your.illnesses].flat()[e];
         let effectDiv = document.createElement("div");
         let iconSpan = document.createElement("span");
         iconSpan.textContent = effect.icon;
@@ -230,31 +246,53 @@ function createTreeHTML(node) {
     return html;
 }
 
+function clearOutWindows() {
+    Object.entries(windowElements).forEach(element => {
+        windowElements.splice(windowElements.indexOf(element), 1);
+    });
+    Object.entries(windows).forEach(element => {
+        windows.splice(windows.indexOf(element), 1);
+    });
+    windows = null;
+    update_meters();
+}
+
 function processYearlyEvents(person) {
+    if (person.lifeExpectancy <= person.age) {
+        console.log(person)
+        person.kill()
+        clearOutWindows();
+    }
+
     const eligibleEvents = eventPool.flat().filter(ev => ev.isEligible(person));
 
-    for (let e in your.effects) {
-        const effect = your.effects[e];
+    for (let e in [person.addictions, person.illnesses].flat()) {
+        const effect = [person.addictions, person.illnesses].flat()[e];
         Object.entries(stats).forEach(([key, _]) => {
             if (effect[key]) {
-                your[key] += effect[key];
+                person[key] += effect[key];
             }
         });
-        if (effect.monetary) {
-            your.money += effect.monetary;
+        person.lifeExpectancy -= effect.lifeExpectancyReduction;
+        if (effect.monetary >= person.money) {
+            person.money += effect.monetary;
+        } else {
+            person.happiness += effect.happiness;
         }
     }
 
-    eligibleEvents.forEach(event => {
+    for (const event of eligibleEvents) {
         if (rand_int(100) / 100 < event.chance) {
             header(event.title);
             print(event.description);
             if (Object.hasOwn(event, 'effect'))
             event.effect(person);
+            break
         }
-    });
+    }
 
     Object.entries(stats).forEach(([key, _]) => {
+        person[key] += 10-rand_int(20);
         person[key] = clamp(person[key], 0, 100);
     });
 }
